@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>StoryAI</title>
+</head>
+<body>
+    <h1>Story Generator</h1>
+    <form action="/generate" method="POST">
+        <label for="prompt">Enter a prompt:</label><br>
+        <textarea id="prompt" name="prompt" rows="4" cols="50"></textarea><br><br>
+        <input type="submit" value="Generate Story">
+    </form>
+    <div id="story">
+        {% if story %}
+            <h2>Generated Story:</h2>
+            <p>{{ story }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
