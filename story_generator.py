@@ -15,7 +15,7 @@ class StoryGenerator:
         self.MODEL = "gpt-3.5-turbo"
     
 
-#Create a function to generate the story text
+    #Create a function to generate the story text
     def generate_story_text(self, prompt, category, length):
         response = self.client.chat.completions.create(
             model = self.MODEL,
@@ -26,5 +26,7 @@ class StoryGenerator:
             max_tokens=length,
         )
         story_text = response.choices[0].message.content
+
+        #Split the story in paragraphs
         paragraphs = story_text.split('\n\n')
         return paragraphs

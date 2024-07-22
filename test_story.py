@@ -1,7 +1,7 @@
 from story_generator import StoryGenerator
 
 
-def test():
+def test_story_text():
     text_generator = StoryGenerator()
     category = input("Choose a catogory for the story")
     user_prompt = input("Write a description of the story")
@@ -9,6 +9,6 @@ def test():
     return story_text_paragraphs
 
 if __name__ == "__main__":
-    story_text_paragraphs = test()
+    story_text_paragraphs = test_story_text()
     for paragraph in story_text_paragraphs:
         print(paragraph)
