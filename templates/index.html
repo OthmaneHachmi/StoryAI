@@ -7,14 +7,37 @@
 <body>
     <h1>Story Generator</h1>
     <form action="/generate" method="POST">
-        <label for="prompt">Enter a prompt:</label><br>
+
+        <label for="prompt">Write a description of the story:</label><br>
         <textarea id="prompt" name="prompt" rows="4" cols="50"></textarea><br><br>
+
+        <label>Select a category of the story</label><br>
+        
+        <select id="category" name="category">
+            <option value="Random">Random</option>
+            <option value="Animals stories">Animals stories</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Educational">Educational</option>
+            <option value="Sci-fi">Sci-fi</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Adventure">Adventure</option>
+        </select><br><br>
+
+        <label for="length">Choose story length:</label><br>
+        <select id="length" name="length">
+            <option value="200">Short</option>
+            <option value="450">Medium</option>
+            <option value="800">Long</option>
+        </select><br><br>
         <input type="submit" value="Generate Story">
     </form>
     <div id="story">
         {% if story %}
             <h2>Generated Story:</h2>
-            <p>{{ story }}</p>
+            {% for paragraph in story%}
+                <p>{{ paragraph }}</p>
+                {% endfor %}
         {% endif %}
     </div>
 </body>

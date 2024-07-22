@@ -14,7 +14,9 @@ def index():
 @app.route('/generate', methods=['POST'])
 def generate_story():
     prompt = request.form['prompt']
-    story = text_generator.generate_story_text(prompt)
+    category = request.form['category']
+    length = int(request.form['length'])
+    story = text_generator.generate_story_text(prompt, category, length)
     print(f"Generated story: {story}")
     return render_template('index.html', story=story)
 

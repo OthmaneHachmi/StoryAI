@@ -16,15 +16,15 @@ class StoryGenerator:
     
 
 #Create a function to generate the story text
-    def generate_story_text(self, prompt):
+    def generate_story_text(self, prompt, category, length):
         response = self.client.chat.completions.create(
             model = self.MODEL,
             messages = [
-            {"role": "system", "content": "you are a story generator, you genetate stories for kids under 10 years old."},
-            {"role": "user", "content": prompt}
+            {"role": "system", "content": "you are a story generator, you genetate stories in a certain catrgory given in the prompt. These stories are for kids under 10 years old."},
+            {"role": "user", "content": f"Category: {category}. {prompt}"}
             ],
-            max_tokens=200,
-
+            max_tokens=length,
         )
-        story = response.choices[0].message.content
-        return story
+        story_text = response.choices[0].message.content
+        paragraphs = story_text.split('\n\n')
+        return paragraphs
