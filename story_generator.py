@@ -16,13 +16,19 @@ class StoryGenerator:
     
 
     #Create a function to generate the story text
-    def generate_story_text(self, prompt, category, length):
+    def generate_story_text(self, prompt, category, length, moral):
+        category_prompt = f"Category: {category}. "
+        length_prompt = f"Length: {length}. "
+        moral_prompt = f"Include this moral {moral}. " if moral else ""
+        full_prompt = f"{category_prompt}{length_prompt}{prompt}. {moral_prompt}"
+        
         response = self.client.chat.completions.create(
             model = self.MODEL,
             messages = [
             {"role": "system", "content": "you are a story generator, you genetate stories in a certain catrgory given in the prompt. These stories are for kids under 10 years old."},
-            {"role": "user", "content": f"Category: {category}. {prompt}"}
+            {"role": "user", "content": full_prompt}
             ],
+            #Set the length of the story
             max_tokens=length,
         )
         story_text = response.choices[0].message.content

@@ -8,7 +8,7 @@
     <h1>Story Generator</h1>
     <form action="/generate" method="POST">
 
-        <label for="prompt">Write a description of the story:</label><br>
+        <label for="prompt">Write a description of the story: (Optional)</label><br>
         <textarea id="prompt" name="prompt" rows="4" cols="50"></textarea><br><br>
 
         <label>Select a category of the story</label><br>
@@ -30,6 +30,10 @@
             <option value="450">Medium</option>
             <option value="800">Long</option>
         </select><br><br>
+
+        <label for="moral">Enter a moral: (Optional)</label><br>
+        <textarea name="moral" id="moral" rows="2" cols="50"></textarea><br><br>
+
         <input type="submit" value="Generate Story">
     </form>
     <div id="story">

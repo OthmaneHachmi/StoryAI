@@ -16,7 +16,8 @@ def generate_story():
     prompt = request.form['prompt']
     category = request.form['category']
     length = int(request.form['length'])
-    story = text_generator.generate_story_text(prompt, category, length)
+    moral = request.form['moral']
+    story = text_generator.generate_story_text(prompt, category, length, moral)
     
     return render_template('index.html', story=story)
 

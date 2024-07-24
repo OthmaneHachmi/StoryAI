@@ -11,4 +11,4 @@ def test_story_text():
 if __name__ == "__main__":
     story_text_paragraphs = test_story_text()
     for paragraph in story_text_paragraphs:
-        print(paragraph)
+        print(f"{paragraph} \n")
