@@ -39,9 +39,12 @@
     <div id="story">
         {% if story %}
             <h2>Generated Story:</h2>
-            {% for paragraph in story%}
-                <p>{{ paragraph }}</p>
-                {% endfor %}
+            {% for paragraph, image in text_images %}
+                <div>
+                    <p>{{ paragraph }}</p>
+                    <img src="{{image}}" alt="Generated image">
+                </div>
+            {% endfor %}
         {% endif %}
     </div>
 </body>

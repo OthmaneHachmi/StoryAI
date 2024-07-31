@@ -14,7 +14,6 @@ class StoryGenerator:
         #Define the model
         self.MODEL = "gpt-3.5-turbo"
     
-
     #Create a function to generate the story text
     def generate_story_text(self, prompt, category, length, moral):
         category_prompt = f"Category: {category}. "

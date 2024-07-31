@@ -1,4 +1,5 @@
 from story_generator import StoryGenerator
+from image_generator import ImageGenerator
 
 
 def test_story_text():
@@ -7,9 +8,13 @@ def test_story_text():
     user_prompt = input("Write a description of the story: ")
     moral_prompt = input("Enter a moral: ")
     story_text_paragraphs = text_generator.generate_story_text(user_prompt, category, length=450, moral=moral_prompt)
-    return story_text_paragraphs
+    print(story_text_paragraphs)
 
-if __name__ == "__main__":
-    story_text_paragraphs = test_story_text()
-    for paragraph in story_text_paragraphs:
-        print(f"{paragraph} \n")
+def test_story_image():
+    image_generator = ImageGenerator()
+    prompt = input("Enter a description for the image")
+    image_url = image_generator.generate_image(prompt)
+    print(image_url)
+
+#test_story_image()
+test_story_text()
