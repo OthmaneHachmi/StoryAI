@@ -1,13 +1,15 @@
 #Create the user interface using flask
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 from story_generator import StoryGenerator
 from image_generator import ImageGenerator
+from audio_generator import AudioGenerator
 
 #create a Flask application instance
 app = Flask(__name__)
 
 text_generator = StoryGenerator()
 image_generator = ImageGenerator()
+audio_generator = AudioGenerator()
 
 @app.route('/')
 def index():
@@ -25,9 +27,18 @@ def generate_story():
     #Return a list of urls of the generated images
     images = [image_generator.generate_image(paragraph) for paragraph in paragraphs]
     #Pair the Paragraph and the images in a list :
-    text_images = zip(paragraphs, images)
+    text_images = list(zip(paragraphs, images))
     
-    return render_template('index.html', text_images=text_images)
+    return render_template('index.html', text_images=text_images, story=' '.join(paragraphs))
+
+@app.route('/generate_audio', methods=['POST'])
+def generate_audio():
+    story = request.form['story']
+    
+    # Generate audio for the story
+    audio_stream = audio_generator.generate_audio(story)
+    
+    return send_file(audio_stream, mimetype="audio/mpeg")
 
 if __name__ == '__main__':
     app.run(debug=True)

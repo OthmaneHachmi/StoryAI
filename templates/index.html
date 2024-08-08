@@ -45,7 +45,33 @@
                     <img src="{{image}}" alt="Generated image">
                 </div>
             {% endfor %}
+
+            <form id="audioForm" action="/generate_audio" method="post">
+                <input type="hidden" name="story" value="{{ story }}">
+                <button type="submit">Generate Audio</button>
+            </form>
+            <audio id="audioPlayer" controls></audio>
+        
+            <script>
+                document.getElementById('audioForm').addEventListener('submit', async function(event) {
+                    event.preventDefault();
+                    const form = event.target;
+                    const formData = new FormData(form);
+                    const response = await fetch(form.action, {
+                        method: form.method,
+                        body: formData
+                    });
+                    if (response.ok) {
+                        const audioBlob = await response.blob();
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        const audioPlayer = document.getElementById('audioPlayer');
+                        audioPlayer.src = audioUrl;
+                        audioPlayer.play();
+                    } else {
+                        console.error('Failed to generate audio');
+                    }
+                });
+            </script>
         {% endif %}
-    </div>
 </body>
 </html>

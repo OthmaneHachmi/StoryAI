@@ -1,6 +1,6 @@
 from story_generator import StoryGenerator
 from image_generator import ImageGenerator
-
+from audio_generator import AudioGenerator
 
 def test_story_text():
     text_generator = StoryGenerator()
@@ -16,5 +16,13 @@ def test_story_image():
     image_url = image_generator.generate_image(prompt)
     print(image_url)
 
+def test_story_audio():
+    audio_generator = AudioGenerator()
+    text = input("Enter the text to convert into speech")
+    audio = audio_generator.generate_audio(text)
+    print(audio)
+
+#Uncomment the function you want to test
 #test_story_image()
-test_story_text()
+#test_story_text()
+#test_story_audio()
