@@ -15,7 +15,8 @@ audio_generator = AudioGenerator()
 def index():
     return render_template('index.html')
 
-@app.route('/generate', methods=['POST'])
+# Create a route for generating the story with images
+@app.route('/generate', methods=['GET', 'POST'])
 def generate_story():
     prompt = request.form['prompt']
     category = request.form['category']
@@ -31,7 +32,8 @@ def generate_story():
     
     return render_template('index.html', text_images=text_images, story=' '.join(paragraphs))
 
-@app.route('/generate_audio', methods=['POST'])
+# Create a route for generating the audio of the story
+@app.route('/generate_audio', methods=['GET', 'POST'])
 def generate_audio():
     story = request.form['story']
     
@@ -39,6 +41,36 @@ def generate_audio():
     audio_stream = audio_generator.generate_audio(story)
     
     return send_file(audio_stream, mimetype="audio/mpeg")
+
+# Create a route for generating text only
+@app.route('/test_text', methods=['GET', 'POST'])
+def test_text():
+    if request.method == 'POST':
+        prompt = request.form['prompt']
+        category = request.form['category']
+        length = int(request.form['length'])
+        moral = request.form['moral']
+        story = text_generator.generate_story_text(prompt, category, length, moral)
+        return render_template('test_text.html', story=story)
+    return render_template('test_text.html')
+
+# Create a route for generating images only
+@app.route('/test_image', methods=['GET', 'POST'])
+def test_image():
+    if request.method == 'POST':
+        image_prompt = request.form['image_prompt']
+        image_url = image_generator.generate_image(image_prompt)
+        return render_template('test_image.html', image_url=image_url)
+    return render_template('test_image.html')
+
+# Create a route for generating audio only
+@app.route('/test_audio', methods=['GET', 'POST'])
+def test_audio():
+    if request.method == 'POST':
+        audio_prompt = request.form['audio_prompt']
+        audio_url = audio_generator.generate_audio(audio_prompt)
+        return render_template('test_audio.html', audio_url=audio_url)
+    return render_template('test_audio.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

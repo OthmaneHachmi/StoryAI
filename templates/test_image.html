@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Generation</title>
+</head>
+<body>
+    <h1>Image Generation</h1>
+
+    <form action="/test_image" method="POST">
+        <label for="image_prompt">Enter a prompt for the image:</label><br>
+        <textarea id="image_prompt" name="image_prompt" rows="4" cols="50" required></textarea><br><br>
+        <input type="submit" value="Generate Image">
+    </form>
+
+    {% if image_url %}
+        <h2>Generated Image:</h2>
+        <img src="{{ image_url }}" alt="Generated Image">
+    {% endif %}
+    
+    <br><br>
+    <a href="/">Home</a>
+    
+</body>
+</html>

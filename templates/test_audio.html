@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Audio Generation</title>
+</head>
+<body>
+    <h1>Audio Generation</h1>
+
+    <form action="/test_audio" method="POST">
+        <label for="audio_prompt">Enter text to generate audio:</label><br>
+        <textarea id="audio_prompt" name="audio_prompt" rows="4" cols="50" required></textarea><br><br>
+        <input type="submit" value="Generate Audio">
+    </form>
+
+    {% if audio_url %}
+        <h2>Generated Audio:</h2>
+        <audio controls>
+            <source src="{{ audio_url }}" type="audio/mpeg">
+        </audio>
+    {% endif %}
+    
+    <br><br>
+    <a href="/">Home</a>
+</body>
+</html>
