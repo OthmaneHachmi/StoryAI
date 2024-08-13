@@ -10,10 +10,10 @@ class AudioGenerator:
         self.client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
 
 
-    def generate_audio(self, text: str) -> IO[bytes]:
+    def generate_audio(self, text: str, voice) -> IO[bytes]:
         # Perform the text-to-speech conversion
         response = self.client.text_to_speech.convert(
-            voice_id="pNInz6obpgDQGcFmaJgB", # Adam pre-made voice
+            voice_id=voice,
             output_format="mp3_22050_32",
             text=text,
             model_id="eleven_multilingual_v2",

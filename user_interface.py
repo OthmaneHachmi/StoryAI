@@ -68,9 +68,18 @@ def test_image():
 def test_audio():
     if request.method == 'POST':
         audio_prompt = request.form['audio_prompt']
-        audio_url = audio_generator.generate_audio(audio_prompt)
-        return render_template('test_audio.html', audio_url=audio_url)
+        voice = request.form['voice']
+        audio_stream = audio_generator.generate_audio(audio_prompt, voice)
+        temp_audio_file = "generated_audio.mp3"
+        with open(temp_audio_file, "wb") as f:
+            f.write(audio_stream.read())
+        return render_template('test_audio.html', audio_url=f"/download_audio/{temp_audio_file}")
+
     return render_template('test_audio.html')
 
+# Route to download the generated audio file
+@app.route('/download_audio/<filename>')
+def download_audio(filename):
+    return send_file(filename, as_attachment=True)
 if __name__ == '__main__':
     app.run(debug=True)
