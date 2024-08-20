@@ -51,8 +51,13 @@
                     <img src="{{image}}" alt="Generated image">
                 </div>
             {% endfor %}
-
+            <h3>Listen to story</h3>
             <form id="audioForm" action="/generate_audio" method="post">
+                <label for="voice">Select a voice</label><br>
+                <select name="voice" id="voice">
+                    <option value="pNInz6obpgDQGcFmaJgB">Man</option>
+                    <option value="AZnzlk1XvdvUeBnXmlld">Woman</option>
+                </select><br><br>
                 <input type="hidden" name="story" value="{{ story }}">
                 <button type="submit">Generate Audio</button>
             </form>

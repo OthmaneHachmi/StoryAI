@@ -36,9 +36,10 @@ def generate_story():
 @app.route('/generate_audio', methods=['GET', 'POST'])
 def generate_audio():
     story = request.form['story']
+    voice = request.form['voice']
     
     # Generate audio for the story
-    audio_stream = audio_generator.generate_audio(story)
+    audio_stream = audio_generator.generate_audio(story, voice)
     
     return send_file(audio_stream, mimetype="audio/mpeg")
 
