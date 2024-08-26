@@ -24,7 +24,7 @@ class StoryGenerator:
         response = self.client.chat.completions.create(
             model = self.MODEL,
             messages = [
-            {"role": "system", "content": "you are a story generator, you genetate stories in a certain catrgory given in the prompt. These stories are for kids under 10 years old."},
+            {"role": "system", "content": "you are a story generator, you genetate stories in a certain catrgory given in the prompt. These stories are for kids under 10 years old. Do not generate the title of the story, just the story"},
             {"role": "user", "content": full_prompt}
             ],
             #Set the length of the story
@@ -35,3 +35,4 @@ class StoryGenerator:
         #Split the story in paragraphs
         paragraphs = story_text.split('\n\n')
         return paragraphs
+    

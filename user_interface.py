@@ -25,10 +25,21 @@ def generate_story():
 
     #Return the story text in a list of paragraphs
     paragraphs = text_generator.generate_story_text(prompt, category, length, moral)
+
+    image_prompts = []
+    image_urls = []
+    for paragraph in paragraphs:
+        image_prompt = image_generator.generate_image_prompt(paragraph)
+        image_url = image_generator.generate_image(image_prompt)
+        image_prompts.append(image_prompt)
+        image_urls.append(image_url)
+
+
+
     #Return a list of urls of the generated images
-    images = [image_generator.generate_image(paragraph) for paragraph in paragraphs]
+    #images = [image_generator.generate_image(paragraph) for paragraph in paragraphs]
     #Pair the Paragraph and the images in a list :
-    text_images = list(zip(paragraphs, images))
+    text_images = list(zip(paragraphs, image_urls))
     
     return render_template('index.html', text_images=text_images, story=' '.join(paragraphs))
 
