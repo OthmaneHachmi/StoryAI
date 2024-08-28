@@ -36,7 +36,8 @@ class ImageGenerator:
                     4. Always include "A colored cartoon type sketch of," at the start of every prompt.
                     5. The very important one, write in crisp and very simple english, don't use complicated words.
                     6. Separate the different traits of the scenario with commas.
-                    7. If you can't understand the story or text, just write whatever you think the situation could be in the text.
+                    7. Include the present caracters in the scenario and their type whether they are humans(girl, boy, man, woman ...), or animals(Lion, badger, turtle ...), or any thing else.
+                    8. If you can't understand the story or text, just write whatever you think the situation could be in the text.
                     
                     Here are some examples on how to generate the prompt:
                     

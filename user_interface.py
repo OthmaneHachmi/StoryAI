@@ -26,6 +26,7 @@ def generate_story():
     #Return the story text in a list of paragraphs
     paragraphs = text_generator.generate_story_text(prompt, category, length, moral)
 
+    #Use text generation to generate from each paragraph a prompt describing the scenario, and use the prompts to generate images
     image_prompts = []
     image_urls = []
     for paragraph in paragraphs:
@@ -34,10 +35,6 @@ def generate_story():
         image_prompts.append(image_prompt)
         image_urls.append(image_url)
 
-
-
-    #Return a list of urls of the generated images
-    #images = [image_generator.generate_image(paragraph) for paragraph in paragraphs]
     #Pair the Paragraph and the images in a list :
     text_images = list(zip(paragraphs, image_urls))
     
