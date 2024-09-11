@@ -8,7 +8,7 @@ def test_story_text():
     user_prompt = input("Write a description of the story: ")
     moral_prompt = input("Enter a moral: ")
     paragraphs = text_generator.generate_story_text(user_prompt, category, length=450, moral=moral_prompt)
-    return paragraphs
+    print(paragraphs)
 
 def test_story_image():
     image_generator = ImageGenerator()
@@ -25,10 +25,11 @@ def test_image_prompt():
     moral_prompt = input("Enter a moral: ")
     print("Generating ...")
     paragraphs = text_generator.generate_story_text(user_prompt, category, length=600, moral=moral_prompt)
-    image_prompts = []
-    for paragraph in paragraphs:
-        image_prompt = image_generator.generate_image_prompt(paragraph)
-        image_prompts.append(image_prompt)
+    image_prompts = image_generator.generate_image_prompt(paragraphs)
+    #image_prompts = []
+    #for paragraph in paragraphs:
+    #    image_prompt = image_generator.generate_image_prompt(paragraph)
+    #    image_prompts.append(image_prompt)
     print(f"Generated Story: \n {paragraphs} \n")
     print(f"The image prompts: \n {image_prompts}")
 

@@ -33,6 +33,6 @@ class StoryGenerator:
         story_text = response.choices[0].message.content
 
         #Split the story in paragraphs
-        paragraphs = story_text.split('\n\n')
-        return paragraphs
+        #paragraphs = story_text.split('\n\n')
+        return story_text
     

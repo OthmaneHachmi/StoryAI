@@ -24,15 +24,22 @@ def generate_story():
     moral = request.form['moral']
 
     #Return the story text in a list of paragraphs
-    paragraphs = text_generator.generate_story_text(prompt, category, length, moral)
+    story_text = text_generator.generate_story_text(prompt, category, length, moral)
 
     #Use text generation to generate from each paragraph a prompt describing the scenario, and use the prompts to generate images
-    image_prompts = []
+    image_prompts = image_generator.generate_image_prompt(story_text)
+    #Split the prompts in a list
+    prompts = image_prompts.split(".\n")
+    # Clean up empty strings and extra spaces
+    image_prompts = [prompt.strip() for prompt in prompts if prompt]  
+
+    #Split the paragraphs
+    paragraphs = story_text.split('\n\n')
+    
+    #Generate the images
     image_urls = []
-    for paragraph in paragraphs:
-        image_prompt = image_generator.generate_image_prompt(paragraph)
+    for image_prompt in image_prompts:
         image_url = image_generator.generate_image(image_prompt)
-        image_prompts.append(image_prompt)
         image_urls.append(image_url)
 
     #Pair the Paragraph and the images in a list :

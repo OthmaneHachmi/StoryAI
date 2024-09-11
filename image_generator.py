@@ -33,7 +33,7 @@ class ImageGenerator:
                     1. The prompt be strictly less than 70 words for each paragraph.
                     2. Don't include special characters other than comma and hyphen and dot.
                     3. You just have to describe the scenario not write the whole story.
-                    4. Always include "A colored cartoon type sketch of," at the start of every prompt.
+                    4. Always include "A colored cartoon type sketch of," at the start of every paragraph's scenario .
                     5. The very important one, write in crisp and very simple english, don't use complicated words.
                     6. Separate the different traits of the scenario with commas.
                     7. Include the present caracters in the scenario and their type whether they are humans(girl, boy, man, woman ...), or animals(Lion, badger, turtle ...), or any thing else.
@@ -41,39 +41,67 @@ class ImageGenerator:
                     
                     Here are some examples on how to generate the prompt:
                     
-                    Example of a story paragraph:
-                    Once upon a time, in a not-so-distant future, there lived a man named Alex. Alex was an adventurous soul who dreamed of exploring the great \
-                    unknown: outer space. From a young age, he would gaze up at the stars with wonder, imagining what it would be like to journey among them.
-                    
+                    Example of a story :
+                    Once upon a time, in the colorful and bustling jungle, there lived a curious little monkey named Milo. Milo was always full of energy and loved exploring every nook and cranny of the jungle.
+
+                    One sunny morning, Milo was swinging from tree to tree when he heard a faint cry for help. Curious, he followed the sound and found a tiny rabbit caught in a thorny bush. The rabbit looked scared and helpless.
+
+                    Without hesitation, Milo jumped into action. Using his nimble fingers, he carefully untangled the rabbit from the thorns. The grateful rabbit hopped around joyfully, thanking Milo for his kindness.
+
+                    From that day on, Milo and the rabbit became the best of friends. They would explore the jungle together, with Milo swinging from tree to tree and the rabbit hopping alongside him. They would play games, share stories, and always look out for each other.
+
+                    One day, while they were playing near a sparkling river, they heard a loud roar coming from a distance. It was a ferocious tiger, prowling through the jungle. 
+                    Milo and the rabbit quickly hid behind some bushes, terrified.
+
+                    Thinking quickly, Milo remembered a secret path that led to a hidden cave where they could seek refuge. He grabbed the rabbit's paw and led the way, running as fast as they could. The tiger roared louder, getting closer and closer.
+
+                    Finally, they reached the safety of the cave, panting heavily. The tiger searched for them but couldn't find their hiding spot. Milo and the rabbit hugged each other, relieved to be safe.
+
+                    From that day on, Milo and the rabbit knew that they could face any challenge as long as they had each other. They continued to explore the jungle together, helping other animals in need and spreading kindness wherever they went.
+
+                    And so, the story of Milo the monkey and his best friend, the rabbit, became a legend in the jungle, inspiring all the animals to work together and look out for one another.
+                                        
                     Expected text from you is:
-                    A colored cartoon type sketch of, a man looking up in the sky at night, sky has stars & moon.
-                    
-                    Example story paragraph:
-                    As the days turned into weeks, Maya forged friendships with the creatures of the jungle. She shared moments of laughter with mischievous monkeys, \
-                    and learned the ancient wisdom of wise old elephants. Together, they explored hidden caves and winding rivers, each new discovery fueling Maya's sense of wonder.
+                    A colored cartoon type sketch of, a curious little monkey, swinging from trees, colorful jungle, lively animals, trees everywhere, jungle background.
+                    A colored cartoon type sketch of, a little monkey hearing a cry for help, small scared rabbit trapped in a thorny bush, sunny jungle scene, concerned monkey looking.
+                    A colored cartoon type sketch of, a nimble monkey freeing a tiny rabbit from thorny bushes, the rabbit hopping happily, jungle trees and bushes around them, sunny sky.
+                    A colored cartoon type sketch of, a joyful monkey swinging from trees, rabbit hopping beside him, green jungle, animals playing, both friends exploring.
+                    A colored cartoon type sketch of, a scared monkey and rabbit hiding behind bushes, a large ferocious tiger prowling nearby, sparkling river, distant jungle background.
+                    A colored cartoon type sketch of, a quick monkey leading a tiny rabbit down a secret path, both running fast, bushes and trees around, loud roaring tiger chasing behind.
+                    A colored cartoon type sketch of, a relieved monkey and rabbit hiding in a cave, tiger searching outside, cave entrance hidden with leaves, tired and panting animals.
+                    A colored cartoon type sketch of, a happy monkey and rabbit exploring the jungle, helping other animals, jungle background with animals, spreading kindness, bright and colorful jungle scene.
+                    A colored cartoon type sketch of, jungle animals gathered together, inspired by the story of a monkey and rabbit, animals working together, green jungle trees in the background.
+                                        
+                    Example story:
+                    Once upon a time in the magical land of Learning Valley, there lived a curious little girl named Lily. Lily loved to explore and discover new things every day. She was always filled with questions and eager to learn more about the world around her.
 
+                    One sunny morning, Lily decided to visit the Wise Owl who lived at the top of the tallest tree in Learning Valley. The owl was known to have all the answers to any question one could ask.
+
+                    As Lily reached the tree, she looked up and saw the Wise Owl perched on a branch, gazing down at her with wise eyes. Lily eagerly asked, "Mr. Owl, can you tell me how plants grow?"
+
+                    The Wise Owl hooted and replied, "Of course, dear Lily! Plants need sunlight, water, and nutrients from the soil to grow. They start as a tiny seed, which then sprouts into a plant with leaves, stems, and flowers."
+
+                    Lily listened attentively, taking in every word the Wise Owl said. She was fascinated by the process of plant growth and couldn't wait to see it for herself. The owl then handed Lily a small seed and said, "Plant this seed in a pot, water it every day, and watch as it grows into a beautiful plant."
+
+                    Excited, Lily rushed back home and followed the owl's instructions. She placed the seed in a pot, watered it daily, and waited patiently. Soon enough, a tiny green shoot emerged from the soil, growing taller and stronger each day. Lily was overjoyed to see her plant thriving and blooming into a beautiful flower.     
+
+                    From that day on, Lily became even more curious about the world around her. She asked the Wise Owl more questions and learned something new every time. She realized that learning was a never-ending adventure, and she was ready to explore it all.
+
+                    And so, with the help of the Wise Owl and her own curiosity, Lily continued to grow and learn, making every day in Learning Valley an exciting and educational 
+                    experience.
+                 
                     Expected prompt from you is:
-                    A colored cartoon type sketch of, A girl laughing with monkeys, old elephants, hidden caves, winding rivers.
-                    
-                    Example of another story paragraph:
-                    In the heart of a bustling metropolis, where skyscrapers kissed the sky and streets hummed with the \
-                    rhythm of life, there existed a city like no other. Its streets were a labyrinth of winding alleys and bustling boulevards, \
-                    lined with towering buildings that reached for the clouds.
-
-                    Expected prompt generated from you is:
-                    A colored cartoon type sketch of, a metropolitan city, high skycrapers, streets, sky with clouds.
-                    
-                    Example story paragraph:
-                    what's up
-
-                    Since the paragraph is vague to understand, you can assume that a person is saying what's up to another person, for this the expected \
-                    prompt generated by you is:
-                    A colored cartoon type sketch of, two person speaking.
-                    
-                    Further rules:
+                    A colored cartoon type sketch of, a curious little girl exploring Learning Valley, green fields, colorful trees, bright sky, eager girl looking around, magical valley setting. 
+                    A colored cartoon type sketch of, a little girl looking up at a tall tree, a wise owl perched on a branch, sunny sky, large tree with leaves, magical valley background.    
+                    A colored cartoon type sketch of, a little girl talking to a wise owl, owl gazing down with wise eyes, tall tree in the background, sunny day, bright and cheerful scene.   
+                    A colored cartoon type sketch of, a wise owl explaining how plants grow, little girl listening carefully, owl on a tree branch, bright green jungle, magical learning atmosphere.   
+                    A colored cartoon type sketch of, an owl handing a tiny seed to a girl, girl looking excited, large tree in background, blue sky, simple scene with owl and girl.   
+                    A colored cartoon type sketch of, a little girl planting a seed in a pot, watering it daily, small green sprout emerging, happy girl watching plant grow, cozy home garden. 
+                    A colored cartoon type sketch of, a joyful girl standing next to a blooming flower, bright green plant in a pot, magical garden background, girl smiling proudly.   
+                    A colored cartoon type sketch of, a curious girl asking more questions to a wise owl, owl perched on tree, magical Learning Valley, bright skies, lush greenery, learning atmosphere.   
+                                    
 
                     Please don't generate more than 70 words for each paragraph, this is a must.
-                    Please note that all the above examples the generated prompts were less than 20 words, you must also generate the prompts strictly less than 70 words.
                     
                     I just want the prompt from you not the explanation of why you generated that prompt."""
                  },
