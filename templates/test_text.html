@@ -2,50 +2,83 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Text Generation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Text – StoryAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Text Generation</h1>
-    
-    <form action="/test_text" method="POST">
-        <label for="prompt">Enter a prompt:</label><br>
-        <textarea id="prompt" name="prompt" rows="4" cols="50"></textarea><br><br>
-        
-        <label>Select a category:</label><br>
-        <select id="category" name="category">
-            <option value="Random">Random</option>
-            <option value="Animals stories">Animals stories</option>
-            <option value="Comedy">Comedy</option>
-            <option value="Educational">Educational</option>
-            <option value="Sci-fi">Sci-fi</option>
-            <option value="Mystery">Mystery</option>
-            <option value="Fantasy">Fantasy</option>
-            <option value="Adventure">Adventure</option>
-        </select><br><br>
+    <nav class="navbar">
+        <span class="nav-brand">📖 StoryAI</span>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/test_text">Test Text</a>
+            <a href="/test_image">Test Image</a>
+            <a href="/test_audio">Test Audio</a>
+        </div>
+    </nav>
 
-        <label for="length">Choose story length:</label><br>
-        <select id="length" name="length">
-            <option value="450">Short</option>
-            <option value="900">Medium</option>
-            <option value="1200">Long</option>
-        </select><br><br>
+    <main class="container">
+        <header class="hero">
+            <h1>Test Text Generation</h1>
+            <p class="hero-sub">Generate story text only, no images</p>
+        </header>
 
-        <label for="moral">Enter a moral (optional):</label><br>
-        <textarea name="moral" id="moral" rows="2" cols="50"></textarea><br><br>
+        {% if error %}
+        <div class="alert alert-error">⚠️ {{ error }}</div>
+        {% endif %}
 
-        <input type="submit" value="Generate Text">
-    </form>
-    
-    {% if story %}
-    <h2>Generated Text:</h2>
-    <div>
-        {% for paragraph in story %}
-            <p>{{ paragraph }}</p>
-        {% endfor %}
-    </div>
-    {% endif %}
+        <div class="card form-card">
+            <form action="/test_text" method="POST">
+                <div class="form-group">
+                    <label for="prompt">Story description <span class="optional">(optional)</span></label>
+                    <textarea id="prompt" name="prompt" rows="3" placeholder="e.g. A clever turtle who wants to fly…"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category">
+                            <option value="Random">🎲 Random</option>
+                            <option value="Animals stories">🐾 Animals</option>
+                            <option value="Comedy">😄 Comedy</option>
+                            <option value="Educational">📚 Educational</option>
+                            <option value="Sci-fi">🚀 Sci-fi</option>
+                            <option value="Mystery">🔍 Mystery</option>
+                            <option value="Fantasy">🧙 Fantasy</option>
+                            <option value="Adventure">🗺️ Adventure</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="length">Length</label>
+                        <select id="length" name="length">
+                            <option value="450">📄 Short</option>
+                            <option value="900">📃 Medium</option>
+                            <option value="1200">📜 Long</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="moral">Moral <span class="optional">(optional)</span></label>
+                    <textarea name="moral" id="moral" rows="2" placeholder="e.g. Never give up"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Generate Text</button>
+            </form>
+        </div>
 
-    <br><br>
-    <a href="/">Home</a>
+        {% if story %}
+        <div class="card" style="margin-top: 2rem;">
+            <h2 style="margin-bottom: 1rem;">Generated Story</h2>
+            {% for paragraph in story.split('\n\n') %}
+                {% if paragraph.strip() %}
+                <p class="story-paragraph">{{ paragraph.strip() }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </main>
+
+    <footer class="footer">
+        <p>Made with ❤️ using OpenAI &amp; ElevenLabs</p>
+    </footer>
 </body>
 </html>

@@ -2,24 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Image Generation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Image – StoryAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Image Generation</h1>
+    <nav class="navbar">
+        <span class="nav-brand">📖 StoryAI</span>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/test_text">Test Text</a>
+            <a href="/test_image">Test Image</a>
+            <a href="/test_audio">Test Audio</a>
+        </div>
+    </nav>
 
-    <form action="/test_image" method="POST">
-        <label for="image_prompt">Enter a prompt for the image:</label><br>
-        <textarea id="image_prompt" name="image_prompt" rows="4" cols="50" required></textarea><br><br>
-        <input type="submit" value="Generate Image">
-    </form>
+    <main class="container">
+        <header class="hero">
+            <h1>Test Image Generation</h1>
+            <p class="hero-sub">Generate a single illustration from a prompt</p>
+        </header>
 
-    {% if image_url %}
-        <h2>Generated Image:</h2>
-        <img src="{{ image_url }}" alt="Generated Image">
-    {% endif %}
-    
-    <br><br>
-    <a href="/">Home</a>
-    
+        {% if error %}
+        <div class="alert alert-error">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <div class="card form-card">
+            <form action="/test_image" method="POST">
+                <div class="form-group">
+                    <label for="image_prompt">Image prompt</label>
+                    <textarea id="image_prompt" name="image_prompt" rows="4" required
+                        placeholder="e.g. A colored cartoon type sketch of, a little fox in a forest, moonlight, fireflies around…"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Generate Image</button>
+            </form>
+        </div>
+
+        {% if image_url %}
+        <div class="card" style="margin-top: 2rem; text-align: center;">
+            <h2 style="margin-bottom: 1rem;">Generated Image</h2>
+            <img src="{{ image_url }}" alt="Generated image"
+                 style="max-width: 100%; border-radius: 12px;"
+                 onerror="this.alt='Image failed to load'">
+        </div>
+        {% endif %}
+    </main>
+
+    <footer class="footer">
+        <p>Made with ❤️ using OpenAI &amp; ElevenLabs</p>
+    </footer>
 </body>
 </html>

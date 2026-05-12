@@ -1,101 +1,127 @@
-#Create the user interface using flask
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, jsonify
 from story_generator import StoryGenerator
 from image_generator import ImageGenerator
 from audio_generator import AudioGenerator
 
-#create a Flask application instance
 app = Flask(__name__)
 
 text_generator = StoryGenerator()
 image_generator = ImageGenerator()
 audio_generator = AudioGenerator()
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Create a route for generating the story with images
-@app.route('/generate', methods=['GET', 'POST'])
+
+@app.route('/generate', methods=['POST'])
 def generate_story():
-    prompt = request.form['prompt']
-    category = request.form['category']
-    length = int(request.form['length'])
-    moral = request.form['moral']
+    prompt   = request.form.get('prompt', '').strip()
+    category = request.form.get('category', 'Random')
+    length   = int(request.form.get('length', 500))
+    moral    = request.form.get('moral', '').strip()
 
-    #Return the story text in a list of paragraphs
-    story_text = text_generator.generate_story_text(prompt, category, length, moral)
+    error = None
+    text_images = []
+    story = ''
 
-    #Use text generation to generate from each paragraph a prompt describing the scenario, and use the prompts to generate images
-    image_prompts = image_generator.generate_image_prompt(story_text)
-    #Split the prompts in a list
-    prompts = image_prompts.split(".\n")
-    # Clean up empty strings and extra spaces
-    image_prompts = [prompt.strip() for prompt in prompts if prompt]  
+    try:
+        # 1. Generate story text
+        story_text = text_generator.generate_story_text(prompt, category, length, moral)
 
-    #Split the paragraphs
-    paragraphs = story_text.split('\n\n')
-    
-    #Generate the images
-    image_urls = []
-    for image_prompt in image_prompts:
-        image_url = image_generator.generate_image(image_prompt)
-        image_urls.append(image_url)
+        # 2. Split into paragraphs
+        paragraphs = [p.strip() for p in story_text.split('\n\n') if p.strip()]
+        story = ' '.join(paragraphs)
 
-    #Pair the Paragraph and the images in a list :
-    text_images = list(zip(paragraphs, image_urls))
-    
-    return render_template('index.html', text_images=text_images, story=' '.join(paragraphs))
+        # 3. Generate image prompts (one per paragraph, via JSON)
+        image_prompts = image_generator.generate_image_prompts(story_text)
 
-# Create a route for generating the audio of the story
-@app.route('/generate_audio', methods=['GET', 'POST'])
+        # Align lengths — pad or trim so they match paragraph count
+        while len(image_prompts) < len(paragraphs):
+            image_prompts.append(image_prompts[-1] if image_prompts else
+                "A colored cartoon type sketch of, a colorful children's story scene.")
+        image_prompts = image_prompts[:len(paragraphs)]
+
+        # 4. Generate images in parallel
+        image_urls = image_generator.generate_images_parallel(image_prompts)
+
+        # 5. Zip paragraphs and images
+        text_images = list(zip(paragraphs, image_urls))
+
+    except Exception as e:
+        error = str(e)
+        print(f"[generate_story] Error: {e}")
+
+    return render_template('index.html',
+                           text_images=text_images,
+                           story=story,
+                           error=error)
+
+
+@app.route('/generate_audio', methods=['POST'])
 def generate_audio():
-    story = request.form['story']
-    voice = request.form['voice']
-    
-    # Generate audio for the story
-    audio_stream = audio_generator.generate_audio(story, voice)
-    
-    return send_file(audio_stream, mimetype="audio/mpeg")
+    story = request.form.get('story', '')
+    voice = request.form.get('voice', 'pNInz6obpgDQGcFmaJgB')
 
-# Create a route for generating text only
+    try:
+        audio_stream = audio_generator.generate_audio(story, voice)
+        return send_file(audio_stream, mimetype="audio/mpeg")
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route('/test_text', methods=['GET', 'POST'])
 def test_text():
+    story = None
+    error = None
     if request.method == 'POST':
-        prompt = request.form['prompt']
-        category = request.form['category']
-        length = int(request.form['length'])
-        moral = request.form['moral']
-        story = text_generator.generate_story_text(prompt, category, length, moral)
-        return render_template('test_text.html', story=story)
-    return render_template('test_text.html')
+        try:
+            prompt   = request.form.get('prompt', '')
+            category = request.form.get('category', 'Random')
+            length   = int(request.form.get('length', 450))
+            moral    = request.form.get('moral', '')
+            story    = text_generator.generate_story_text(prompt, category, length, moral)
+        except Exception as e:
+            error = str(e)
+    return render_template('test_text.html', story=story, error=error)
 
-# Create a route for generating images only
+
 @app.route('/test_image', methods=['GET', 'POST'])
 def test_image():
+    image_url = None
+    error = None
     if request.method == 'POST':
-        image_prompt = request.form['image_prompt']
-        image_url = image_generator.generate_image(image_prompt)
-        return render_template('test_image.html', image_url=image_url)
-    return render_template('test_image.html')
+        try:
+            image_prompt = request.form.get('image_prompt', '')
+            image_url    = image_generator.generate_image(image_prompt)
+        except Exception as e:
+            error = str(e)
+    return render_template('test_image.html', image_url=image_url, error=error)
 
-# Create a route for generating audio only
+
 @app.route('/test_audio', methods=['GET', 'POST'])
 def test_audio():
+    audio_url = None
+    error = None
     if request.method == 'POST':
-        audio_prompt = request.form['audio_prompt']
-        voice = request.form['voice']
-        audio_stream = audio_generator.generate_audio(audio_prompt, voice)
-        temp_audio_file = "generated_audio.mp3"
-        with open(temp_audio_file, "wb") as f:
-            f.write(audio_stream.read())
-        return render_template('test_audio.html', audio_url=f"/download_audio/{temp_audio_file}")
+        try:
+            audio_prompt = request.form.get('audio_prompt', '')
+            voice        = request.form.get('voice', 'pNInz6obpgDQGcFmaJgB')
+            audio_stream = audio_generator.generate_audio(audio_prompt, voice)
+            temp_file    = "generated_audio.mp3"
+            with open(temp_file, "wb") as f:
+                f.write(audio_stream.read())
+            audio_url = f"/download_audio/{temp_file}"
+        except Exception as e:
+            error = str(e)
+    return render_template('test_audio.html', audio_url=audio_url, error=error)
 
-    return render_template('test_audio.html')
 
-# Route to download the generated audio file
 @app.route('/download_audio/<filename>')
 def download_audio(filename):
     return send_file(filename, as_attachment=True)
+
+
 if __name__ == '__main__':
     app.run(debug=True)

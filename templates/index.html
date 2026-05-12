@@ -2,89 +2,204 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StoryAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav>
-        <a href="/">Home</a><br>
-        <a href="/test_text">Test Text Generation</a><br>
-        <a href="/test_image">Test Image Generation</a><br>
-        <a href="/test_audio">Test Audio Generation</a><br>
-    </nav>
-    <h1>Story Generator</h1>
-    <form action="/generate" method="POST">
 
-        <label for="prompt">Write a description of the story: (Optional)</label><br>
-        <textarea id="prompt" name="prompt" rows="4" cols="50"></textarea><br><br>
-
-        <label>Select a category of the story</label><br>
-        
-        <select id="category" name="category">
-            <option value="Random">Random</option>
-            <option value="Animals stories">Animals stories</option>
-            <option value="Comedy">Comedy</option>
-            <option value="Educational">Educational</option>
-            <option value="Sci-fi">Sci-fi</option>
-            <option value="Mystery">Mystery</option>
-            <option value="Fantasy">Fantasy</option>
-            <option value="Adventure">Adventure</option>
-        </select><br><br>
-
-        <label for="length">Choose story length:</label><br>
-        <select id="length" name="length">
-            <option value="500">Short</option>
-            <option value="900">Medium</option>
-            <option value="1300">Long</option>
-        </select><br><br>
-
-        <label for="moral">Enter a moral: (Optional)</label><br>
-        <textarea name="moral" id="moral" rows="2" cols="50"></textarea><br><br>
-
-        <input type="submit" value="Generate Story">
-    </form>
-    <div id="story">
-        {% if story %}
-            <h2>Generated Story:</h2>
-            {% for paragraph, image in text_images %}
-                <div>
-                    <p>{{ paragraph }}</p>
-                    <img src="{{image}}" alt="Generated image">
-                </div>
-            {% endfor %}
-            <h3>Listen to story</h3>
-            <form id="audioForm" action="/generate_audio" method="post">
-                <label for="voice">Select a voice</label><br>
-                <select name="voice" id="voice">
-                    <option value="pNInz6obpgDQGcFmaJgB">Man</option>
-                    <option value="AZnzlk1XvdvUeBnXmlld">Woman</option>
-                </select><br><br>
-                <input type="hidden" name="story" value="{{ story }}">
-                <button type="submit">Generate Audio</button>
-            </form>
-            <audio id="audioPlayer" controls></audio>
-        
-            <script>
-                document.getElementById('audioForm').addEventListener('submit', async function(event) {
-                    event.preventDefault();
-                    const form = event.target;
-                    const formData = new FormData(form);
-                    const response = await fetch(form.action, {
-                        method: form.method,
-                        body: formData
-                    });
-                    if (response.ok) {
-                        const audioBlob = await response.blob();
-                        const audioUrl = URL.createObjectURL(audioBlob);
-                        const audioPlayer = document.getElementById('audioPlayer');
-                        audioPlayer.src = audioUrl;
-                        audioPlayer.play();
-                    } else {
-                        console.error('Failed to generate audio');
-                    }
-                });
-            </script>
-        {% endif %}
+    <!-- Loading overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display:none;">
+        <div class="loading-box">
+            <div class="spinner"></div>
+            <p class="loading-title">Crafting your story…</p>
+            <p class="loading-sub" id="loadingMsg">Writing the adventure</p>
+        </div>
     </div>
 
+    <nav class="navbar">
+        <span class="nav-brand">📖 StoryAI</span>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/test_text">Test Text</a>
+            <a href="/test_image">Test Image</a>
+            <a href="/test_audio">Test Audio</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <header class="hero">
+            <h1>Story Generator</h1>
+            <p class="hero-sub">Create illustrated children's stories with AI ✨</p>
+        </header>
+
+        {% if error %}
+        <div class="alert alert-error">
+            ⚠️ Something went wrong: {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="card form-card">
+            <form id="storyForm" action="/generate" method="POST">
+
+                <div class="form-group">
+                    <label for="prompt">Story description <span class="optional">(optional)</span></label>
+                    <textarea id="prompt" name="prompt" rows="3"
+                        placeholder="e.g. A brave little fox who is afraid of the dark…"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category">
+                            <option value="Random">🎲 Random</option>
+                            <option value="Animals stories">🐾 Animals</option>
+                            <option value="Comedy">😄 Comedy</option>
+                            <option value="Educational">📚 Educational</option>
+                            <option value="Sci-fi">🚀 Sci-fi</option>
+                            <option value="Mystery">🔍 Mystery</option>
+                            <option value="Fantasy">🧙 Fantasy</option>
+                            <option value="Adventure">🗺️ Adventure</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="length">Length</label>
+                        <select id="length" name="length">
+                            <option value="500">📄 Short</option>
+                            <option value="900">📃 Medium</option>
+                            <option value="1300">📜 Long</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="moral">Moral lesson <span class="optional">(optional)</span></label>
+                    <textarea name="moral" id="moral" rows="2"
+                        placeholder="e.g. Kindness always wins"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg" id="generateBtn">
+                    ✨ Generate Story
+                </button>
+            </form>
+        </div>
+
+        {% if story %}
+        <section id="storySection" class="story-section">
+            <h2 class="story-title">Your Story</h2>
+
+            <div class="storybook">
+                {% for paragraph, image in text_images %}
+                <div class="story-page {% if loop.index is even %}page-reverse{% endif %}">
+                    <div class="story-image-wrap">
+                        <img src="{{ image }}" alt="Illustration for paragraph {{ loop.index }}"
+                             onerror="this.src='https://placehold.co/512x512/e8d5b7/8b6914?text=Image+unavailable'">
+                    </div>
+                    <div class="story-text-wrap">
+                        <span class="page-number">{{ loop.index }}</span>
+                        <p class="story-paragraph">{{ paragraph }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="card audio-card">
+                <h3>🎧 Listen to the story</h3>
+                <form id="audioForm" action="/generate_audio" method="post">
+                    <div class="audio-controls">
+                        <div class="form-group">
+                            <label for="voice">Narrator voice</label>
+                            <select name="voice" id="voice">
+                                <option value="pNInz6obpgDQGcFmaJgB">🧔 Man</option>
+                                <option value="AZnzlk1XvdvUeBnXmlld">👩 Woman</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-secondary" id="audioBtn">
+                            🔊 Generate Audio
+                        </button>
+                    </div>
+                    <input type="hidden" name="story" value="{{ story }}">
+                </form>
+                <div id="audioStatus" class="audio-status" style="display:none;">
+                    <div class="spinner spinner-sm"></div>
+                    <span>Generating narration…</span>
+                </div>
+                <audio id="audioPlayer" controls style="display:none; width:100%; margin-top:1rem;"></audio>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <footer class="footer">
+        <p>Made with ❤️ using OpenAI &amp; ElevenLabs</p>
+    </footer>
+
+    <script>
+        // Loading screen with rotating messages
+        const loadingMessages = [
+            "Writing the adventure…",
+            "Painting the illustrations…",
+            "Adding a sprinkle of magic…",
+            "Almost ready…"
+        ];
+
+        document.getElementById('storyForm').addEventListener('submit', function () {
+            const overlay = document.getElementById('loadingOverlay');
+            const msgEl   = document.getElementById('loadingMsg');
+            overlay.style.display = 'flex';
+            let i = 0;
+            setInterval(() => {
+                i = (i + 1) % loadingMessages.length;
+                msgEl.textContent = loadingMessages[i];
+            }, 4000);
+        });
+
+        // Audio generation
+        const audioForm = document.getElementById('audioForm');
+        if (audioForm) {
+            audioForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const btn    = document.getElementById('audioBtn');
+                const status = document.getElementById('audioStatus');
+                const player = document.getElementById('audioPlayer');
+
+                btn.disabled    = true;
+                btn.textContent = '⏳ Generating…';
+                status.style.display = 'flex';
+                player.style.display = 'none';
+
+                try {
+                    const formData = new FormData(audioForm);
+                    const response = await fetch('/generate_audio', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        player.src = URL.createObjectURL(blob);
+                        player.style.display = 'block';
+                        player.play();
+                    } else {
+                        alert('Audio generation failed. Please try again.');
+                    }
+                } catch (err) {
+                    alert('Network error. Please try again.');
+                } finally {
+                    btn.disabled    = false;
+                    btn.textContent = '🔊 Generate Audio';
+                    status.style.display = 'none';
+                }
+            });
+        }
+
+        // Scroll to story after generation
+        const storySection = document.getElementById('storySection');
+        if (storySection) {
+            setTimeout(() => storySection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+        }
+    </script>
 </body>
 </html>
