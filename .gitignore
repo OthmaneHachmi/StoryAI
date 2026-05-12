@@ -3,4 +3,4 @@ venv/
 __pycache__/
 *.pyc
 *.pyo
-generated_audio.mp3
+generated_audio.mp3__pycache__/
